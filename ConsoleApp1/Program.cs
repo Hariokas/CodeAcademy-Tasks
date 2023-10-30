@@ -56,7 +56,7 @@
             ChangeForegroundColor(ConsoleColor.DarkMagenta);
             Console.WriteLine("/______\\");
 
-            ChangeForegroundColor(DefaultColor);
+            ChangeForegroundColor();
             Filler();
         }
 
@@ -89,9 +89,8 @@
             ChangeForegroundColor(ConsoleColor.Green);
             Console.WriteLine("      V         ");
 
+            ChangeForegroundColor();
             Filler();
-
-            ChangeForegroundColor(ConsoleColor.White);
         }
 
         private static void FifthTask(string item, int quantity, int price)
@@ -110,6 +109,11 @@
             Console.WriteLine($"Tel.: {phoneNumber}");
             Console.WriteLine("======================================");
             Filler();
+        }
+
+        private static void ChangeForegroundColor()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private static void ChangeForegroundColor(ConsoleColor color)
