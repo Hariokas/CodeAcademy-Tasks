@@ -9,7 +9,7 @@ using static ConsoleApp1.Helpers;
 
 namespace ConsoleApp1
 {
-    public static class ThirdLecture
+    public static class Lecture3
     {
         public static void RunTasks()
         {

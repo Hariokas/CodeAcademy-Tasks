@@ -7,7 +7,7 @@ using static ConsoleApp1.Helpers;
 
 namespace ConsoleApp1
 {
-    public static class FirstLecture
+    public static class Lecture1
     {
         public static void RunTasks()
         {

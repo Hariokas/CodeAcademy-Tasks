@@ -7,10 +7,11 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            //FirstLecture.RunTasks();
-            //SecondLecture.RunTasks();
-            //ThirdLecture.RunTasks();
-            FourthLecture.RunTasks();
+            //Lecture1.RunTasks();
+            //Lecture2.RunTasks();
+            //Lecture3.RunTasks();
+            //Lecture4.RunTasks();
+            Lecture5.RunTasks();
         }
     }
 }

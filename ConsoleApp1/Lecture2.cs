@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    public static class SecondLecture
+    public static class Lecture2
     {
 
         public static void RunTasks()
