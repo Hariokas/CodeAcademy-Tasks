@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishAot>true</PublishAot>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+		<Platforms>AnyCPU;x64</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Advanced - OOP\Classes\Streams\FileWithText.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Advanced - OOP\Classes\Streams\FileWithText.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Advanced - OOP\Classes\Delegates\" />
+	</ItemGroup>
+
+</Project>
