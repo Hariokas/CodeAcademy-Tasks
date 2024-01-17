@@ -44,7 +44,9 @@ internal class Program
         //Exceptions.RunTasks();
         //ExtensionMethods.RunTasks();
         //Delegates.Run();
-        LinqAndLambda.Run();
+        //LinqAndLambda.Run();
+        //InterfacesAndIComparer.Run();
+        Interfaces2.Run();
 
         #endregion
     }
