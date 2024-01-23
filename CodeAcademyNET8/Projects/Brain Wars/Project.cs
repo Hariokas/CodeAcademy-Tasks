@@ -83,7 +83,7 @@
 
 #endregion
 
-namespace CodeAcademyNET8;
+namespace CodeAcademyNET8.Projects.Brain_Wars;
 
 internal class Project
 {

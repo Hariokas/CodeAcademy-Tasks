@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using CodeAcademyNET8.Advanced___OOP.Tasks;
+using CodeAcademyNET8.Projects.ATM_Project;
 
 namespace CodeAcademyNET8;
 
@@ -46,7 +47,11 @@ internal class Program
         //Delegates.Run();
         //LinqAndLambda.Run();
         //InterfacesAndIComparer.Run();
-        Interfaces2.Run();
+        //Interfaces2.Run();
+
+        // PROJECT!
+        var atm = new ATMMain();
+        atm.Run();
 
         #endregion
     }

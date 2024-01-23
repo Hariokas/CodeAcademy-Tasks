@@ -1,6 +1,6 @@
 ﻿namespace CodeAcademyNET8.Advanced___OOP.Classes.Interfaces;
 
-internal class InterfaceHexagon(double sideLength) : IPolygon, IWriteToFile
+internal class InterfaceHexagon(double sideLength) : IPolygon
 {
     public double SideLength { get; set; } = sideLength;
 
