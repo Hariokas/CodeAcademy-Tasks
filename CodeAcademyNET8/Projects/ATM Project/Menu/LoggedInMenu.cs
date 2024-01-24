@@ -1,6 +1,6 @@
 ﻿using CodeAcademyNET8.Projects.ATM_Project.Enums;
 
-namespace CodeAcademyNET8.Projects.ATM_Project;
+namespace CodeAcademyNET8.Projects.ATM_Project.Menu;
 
 internal class LoggedInMenu(ATMMain atmMain) : IMenu
 {

@@ -1,4 +1,4 @@
-﻿namespace CodeAcademyNET8.Projects.ATM_Project;
+﻿namespace CodeAcademyNET8.Projects.ATM_Project.Menu;
 
 internal interface IMenu
 {
