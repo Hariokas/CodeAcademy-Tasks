@@ -67,5 +67,4 @@ internal static class Generics2
 
         Separator();
     }
-
 }

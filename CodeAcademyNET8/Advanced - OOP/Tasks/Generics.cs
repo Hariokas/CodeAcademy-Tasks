@@ -51,6 +51,5 @@ internal class Generics
         myList.Print();
 
         Separator();
-
     }
 }

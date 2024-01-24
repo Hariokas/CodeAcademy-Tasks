@@ -8,9 +8,9 @@ internal class Delegates
 
     public delegate List<int> GetTheNextNumberDelegate(List<int> integerList, int step);
 
-    public delegate string PrintUserInfoDelegate(string firstName, string lastName, int age);
-
     public delegate string GetTypeOfElementDelegate<in T>(T element);
+
+    public delegate string PrintUserInfoDelegate(string firstName, string lastName, int age);
 
     public static void Run()
     {

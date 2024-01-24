@@ -137,7 +137,7 @@ internal static class Streams
         long bufferSize = 1024 * 1024; // 1MB
 
         stopwatch.Start();
-        using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+        using (var fileStream = new FileStream(filePath, FileMode.Open))
         {
             var buffer = new byte[bufferSize];
             while (fileStream.Read(buffer, 0, buffer.Length) > 0)
@@ -145,12 +145,13 @@ internal static class Streams
                 // Make coffee
             }
         }
+
         stopwatch.Stop();
         Console.WriteLine($"FileStream: {stopwatch.ElapsedMilliseconds} ms");
         stopwatch.Reset();
 
         stopwatch.Start();
-        using (StreamReader reader = new StreamReader(filePath, Encoding.UTF8))
+        using (var reader = new StreamReader(filePath, Encoding.UTF8))
         {
             var buffer = new char[bufferSize];
             while (reader.Read(buffer, 0, buffer.Length) > 0)
@@ -158,6 +159,7 @@ internal static class Streams
                 // Sip coffee
             }
         }
+
         stopwatch.Stop();
         Console.WriteLine($"StreamReader (chunk reading): {stopwatch.ElapsedMilliseconds} ms");
         stopwatch.Reset();
@@ -167,5 +169,4 @@ internal static class Streams
         //stopwatch.Stop();
         //Console.WriteLine("File.ReadAllText: " + stopwatch.ElapsedMilliseconds + " ms");
     }
-
 }

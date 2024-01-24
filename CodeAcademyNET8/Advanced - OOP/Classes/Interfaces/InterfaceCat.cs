@@ -1,6 +1,6 @@
 ﻿namespace CodeAcademyNET8.Advanced___OOP.Classes.Interfaces;
 
-internal class InterfaceCat (string name) : IMammal
+internal class InterfaceCat(string name) : IMammal
 {
     public string Name { get; set; } = name;
 

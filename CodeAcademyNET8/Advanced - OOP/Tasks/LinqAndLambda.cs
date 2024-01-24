@@ -164,7 +164,6 @@ internal static class LinqAndLambda
         Console.WriteLine($"Pets over 5 years old with letter A in name:\n{ForeachToString(selectedPets)}");
 
         Separator();
-
     }
 
     private static void Task2_2()

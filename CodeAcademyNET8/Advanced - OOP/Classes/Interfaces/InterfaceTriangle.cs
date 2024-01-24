@@ -1,8 +1,7 @@
 ﻿namespace CodeAcademyNET8.Advanced___OOP.Classes.Interfaces;
 
-internal class InterfaceTriangle (double sideA, double sideB, double sideC) : IPolygon, IWriteToFile
+internal class InterfaceTriangle(double sideA, double sideB, double sideC) : IPolygon, IWriteToFile
 {
-
     public double SideA { get; set; } = sideA;
     public double SideB { get; set; } = sideB;
     public double SideC { get; set; } = sideC;
@@ -31,5 +30,4 @@ internal class InterfaceTriangle (double sideA, double sideB, double sideC) : IP
     {
         return $"Triangle with sides [{SideA}], [{SideB}], [{SideC}], area: [{GetArea()}]";
     }
-
 }

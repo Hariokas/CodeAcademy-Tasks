@@ -1,6 +1,4 @@
-﻿using System.Threading.Channels;
-
-namespace CodeAcademyNET8.Advanced___OOP.Classes.Generics;
+﻿namespace CodeAcademyNET8.Advanced___OOP.Classes.Generics;
 
 internal static class Validation
 {
@@ -17,14 +15,13 @@ internal static class Validation
 
         if (typeof(T) == typeof(string))
             Console.WriteLine($"Object of type \"{typeof(T).Name}\" is a string.");
-
     }
 
     public static void Compare<T1, T2>(T1 value1, T2 value2)
     {
         if (value1 is null || value2 is null)
         {
-            Console.WriteLine($"One of the objects is null!");
+            Console.WriteLine("One of the objects is null!");
             //throw new ArgumentNullException(nameof(value));
             return;
         }
@@ -37,7 +34,5 @@ internal static class Validation
 
         Console.WriteLine($"Type of T1 is [{typeof(T1).Name}]");
         Console.WriteLine($"Type of T2 is [{typeof(T2).Name}]");
-
     }
-
 }

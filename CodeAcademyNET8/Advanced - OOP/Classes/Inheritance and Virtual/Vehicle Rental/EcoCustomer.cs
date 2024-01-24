@@ -8,7 +8,7 @@ internal class EcoCustomer(string name) : Customer(name)
         var discountHours = Math.Min(2, rentalHours);
         total += discountHours * ratePerHour * 0.8m;
 
-        if (rentalHours > 2) 
+        if (rentalHours > 2)
             total += (rentalHours - 2) * ratePerHour;
 
         return total;

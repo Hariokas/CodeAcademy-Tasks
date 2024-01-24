@@ -1,5 +1,5 @@
-﻿using static CodeAcademyNET8.Helpers;
-using CodeAcademyNET8.Advanced___OOP.Classes.Exceptions;
+﻿using CodeAcademyNET8.Advanced___OOP.Classes.Exceptions;
+using static CodeAcademyNET8.Helpers;
 
 namespace CodeAcademyNET8.Advanced___OOP.Tasks;
 

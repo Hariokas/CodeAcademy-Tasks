@@ -7,7 +7,6 @@ internal static class Accessibility
 {
     public static void RunTasks()
     {
-
     }
 
     private static void Task1()
@@ -22,7 +21,5 @@ internal static class Accessibility
         Console.WriteLine($"Teacher's subject: {teacher.GetSubject()}");
 
         Separator();
-
     }
-
 }

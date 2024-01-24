@@ -136,10 +136,10 @@ internal class TicTacToe
     {
         // Loop through the board to find if the opponent is about to win
         for (var row = 0; row < 3; row++)
-            for (var col = 0; col < 3; col++)
-                // Check if making a move in (row, col) will block the opponent from winning
-                if (CanBlockOpponentWin(row, col))
-                    return (row, col);
+        for (var col = 0; col < 3; col++)
+            // Check if making a move in (row, col) will block the opponent from winning
+            if (CanBlockOpponentWin(row, col))
+                return (row, col);
         return null;
     }
 
@@ -204,8 +204,8 @@ internal class TicTacToe
     private static void InitializeBoard()
     {
         for (var i = 0; i < 3; i++)
-            for (var j = 0; j < 3; j++)
-                Board[i, j] = ' ';
+        for (var j = 0; j < 3; j++)
+            Board[i, j] = ' ';
     }
 
     private static bool CheckWin()

@@ -1,24 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CodeAcademyNET8.Advanced___OOP.Classes.Accessibility;
 
-namespace CodeAcademyNET8.Advanced___OOP.Classes.Accessibility
+internal class Circle(double radius) : Shape
 {
-    internal class Circle(double radius) : Shape
+    public double Radius { get; } = radius;
+
+    public override double CalculateArea()
     {
-        private double _radius = radius;
-
-        public double Radius
-        {
-            get => _radius;
-            private set => _radius = value;
-        }
-
-        public override double CalculateArea()
-        {
-            return Math.PI * Math.Pow(Radius, 2);
-        }
+        return Math.PI * Math.Pow(Radius, 2);
     }
 }

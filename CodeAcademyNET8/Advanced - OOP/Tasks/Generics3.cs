@@ -44,7 +44,7 @@ internal class ReadOnlyList<T>
     {
         Validator.EnsureNotNull(list);
         _list = list;
-    } 
+    }
 
     public void PrintList()
     {

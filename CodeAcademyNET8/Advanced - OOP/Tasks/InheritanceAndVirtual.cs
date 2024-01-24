@@ -36,7 +36,7 @@ internal static class InheritanceAndVirtual
             new("Jane Smith", 2200),
             new("John Doe", 1800),
             new("Jane Doe", 2300),
-            new Programmer("John Programmer", 2500,"C#"),
+            new Programmer("John Programmer", 2500, "C#"),
             new Programmer("Jane Programmer", 3800, "Scratch")
         };
 
@@ -68,7 +68,7 @@ internal static class InheritanceAndVirtual
         // Create a short scenario where you as a customer can reserve the vehicle you want
         // and depending on the vehicle it should throw a message when the methods
         // "Drive()", "PrintMaxSpeed", "GetCapacity" and "GetFuelEfficiency" are used.​
-        
+
         // Complement your solution [Task 2.2 (vehicle rental system)] and make everything work using virtual methods.
         // Extend the program so that clients can be of several types ["VIP", "Standard", "Eco"]
         // each of these types should have their own CalculateTotal() implementation.
@@ -116,7 +116,7 @@ internal static class InheritanceAndVirtual
             new("Jane Smith", 2200),
             new("John Doe", 1800),
             new("Jane Doe", 2300),
-            new Programmer("John Programmer", 2500,"C#"),
+            new Programmer("John Programmer", 2500, "C#"),
             new Programmer("Jane Programmer", 3800, "Scratch")
         };
 

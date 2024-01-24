@@ -7,15 +7,13 @@ internal class Manager(string name, double salary, List<Employee> employees) : E
     public void PrintProgrammersInfo()
     {
         foreach (var employee in Employees)
-        {
             if (employee is Programmer programmer)
-                Console.WriteLine($"Programmer {programmer.Name} - {programmer.Salary} EUR - {programmer.ProgrammingLanguage}");
-        }
+                Console.WriteLine(
+                    $"Programmer {programmer.Name} - {programmer.Salary} EUR - {programmer.ProgrammingLanguage}");
     }
 
     public override string Greeting()
     {
         return $"Hello, my name is {Name} and I am a manager";
     }
-
 }

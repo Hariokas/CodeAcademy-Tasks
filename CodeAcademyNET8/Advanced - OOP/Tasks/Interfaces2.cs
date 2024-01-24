@@ -74,13 +74,16 @@ internal static class Interfaces2
         switch (result)
         {
             case 0:
-                Console.WriteLine($"{source.GetType().Name} [{sourceArea}] is equal to {comparison?.GetType().Name} [{comparisonArea}]");
+                Console.WriteLine(
+                    $"{source.GetType().Name} [{sourceArea}] is equal to {comparison?.GetType().Name} [{comparisonArea}]");
                 break;
             case 1:
-                Console.WriteLine($"{source.GetType().Name} [{sourceArea}] is greater than {comparison?.GetType().Name} [{comparisonArea}]");
+                Console.WriteLine(
+                    $"{source.GetType().Name} [{sourceArea}] is greater than {comparison?.GetType().Name} [{comparisonArea}]");
                 break;
             case -1:
-                Console.WriteLine($"{source.GetType().Name} [{sourceArea}] is less than {comparison?.GetType().Name} [{comparisonArea}]");
+                Console.WriteLine(
+                    $"{source.GetType().Name} [{sourceArea}] is less than {comparison?.GetType().Name} [{comparisonArea}]");
                 break;
             default:
                 Console.WriteLine($"{source.GetType().Name} is not comparable to {comparison?.GetType().Name}");
