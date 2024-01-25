@@ -8,16 +8,9 @@ internal class FileService
 {
     private const string UsersFileName = "users.json";
 
-    private List<UserModel> _userList = [];
+    private readonly List<UserModel> _userList = [];
 
-    public List<UserModel> UserList
-    {
-        get
-        {
-            ParseUserList();
-            return _userList;
-        }
-    }
+    public List<UserModel> UserList => ReadUsersFile();
 
     public void AddNewUser(UserModel newUser)
     {
@@ -46,28 +39,18 @@ internal class FileService
         }
     }
 
-    public UserModel GetUser(string userId)
-    {
-        return _userList.FirstOrDefault(u => u.Id == userId) ?? new UserModel();
-    }
-
-    private void ParseUserList()
+    private List<UserModel> ReadUsersFile()
     {
         try
         {
-            _userList = ReadUsersFile();
+            var users = File.ReadAllText(UsersFileName);
+            var userList = JsonConvert.DeserializeObject<List<UserModel>>(users) ?? [];
+            return userList;
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Failed to parse user list: {e.Message}");
+            Console.WriteLine($"Failed to read users file: {e.Message}");
+            return [];
         }
-    }
-
-    private List<UserModel> ReadUsersFile()
-    {
-        var users = File.ReadAllText(UsersFileName);
-        var userList = JsonConvert.DeserializeObject<List<UserModel>>(users) ?? [];
-
-        return userList;
     }
 }

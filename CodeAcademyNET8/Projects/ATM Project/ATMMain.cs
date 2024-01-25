@@ -6,13 +6,14 @@ namespace CodeAcademyNET8.Projects.ATM_Project;
 
 internal class ATMMain
 {
-    private readonly AuthenticationService _authenticationService;
     private readonly FileService _fileService = new();
-    private readonly TransactionService _transactionService = new();
+    private readonly AuthenticationService _authenticationService;
+    private readonly TransactionService _transactionService;
 
     public ATMMain()
     {
         _authenticationService = new AuthenticationService(_fileService.UserList);
+        _transactionService = new TransactionService(_fileService);
     }
 
     public UserModel CurrentUser => _authenticationService.CurrentUser;
@@ -38,31 +39,17 @@ internal class ATMMain
 
     internal void Withdraw()
     {
-        var withdrawalSuccessful = _transactionService.Withdraw(CurrentUser);
-        if (!withdrawalSuccessful)
-        {
-            WaitForClickAnyButton();
-            return;
-        }
-
-        _fileService.UpdateUser(CurrentUser);
+        _transactionService.Withdraw(CurrentUser);
         WaitForClickAnyButton();
     }
 
     internal void Deposit()
     {
-        var depositSuccessful = _transactionService.Deposit(CurrentUser);
-        if (!depositSuccessful)
-        {
-            WaitForClickAnyButton();
-            return;
-        }
-
-        _fileService.UpdateUser(CurrentUser);
+        _transactionService.Deposit(CurrentUser);
         WaitForClickAnyButton();
     }
 
-    public void PrintTransactionHistory()
+    internal void PrintTransactionHistory()
     {
         _transactionService.PrintTransactionHistory(CurrentUser);
         Console.WriteLine("Press any key to continue...");
@@ -153,9 +140,27 @@ internal class ATMMain
             Register();
 
         _fileService.AddNewUser(user);
+        _authenticationService.CurrentUser = user;
+
         PrintInGreen("Successfully registered!");
         WaitForClickAnyButton();
         return true;
+    }
+
+    internal void Logout()
+    {
+        _authenticationService.Logout();
+        PrintBanner();
+        PrintInGreen("You have been logged out.");
+        WaitForClickAnyButton();
+    }
+
+    internal void Exit()
+    {
+        PrintBanner();
+        PrintInGreen("Thank you for using our ATM. Goodbye!");
+        Thread.Sleep(2000);
+        Environment.Exit(0);
     }
 
     internal string GetUserInput(string message)
@@ -174,22 +179,6 @@ internal class ATMMain
             PrintInRed("Invalid input.");
             WaitForClickAnyButton();
         }
-    }
-
-    internal void Logout()
-    {
-        _authenticationService.Logout();
-        PrintBanner();
-        PrintInGreen("You have been logged out.");
-        WaitForClickAnyButton();
-    }
-
-    internal void Exit()
-    {
-        PrintBanner();
-        PrintInGreen("Thank you for using our ATM. Goodbye!");
-        Thread.Sleep(2000);
-        Environment.Exit(0);
     }
 
     internal void WaitForClickAnyButton()

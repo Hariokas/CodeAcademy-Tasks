@@ -42,6 +42,11 @@ internal class AuthenticationService(IEnumerable<UserModel> userList)
         return user.Pin == hashedPin;
     }
 
+    protected internal void Logout()
+    {
+        CurrentUser = new UserModel();
+    }
+
     protected internal string HashPin(string pin)
     {
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(pin));
@@ -53,8 +58,4 @@ internal class AuthenticationService(IEnumerable<UserModel> userList)
         return sb.ToString();
     }
 
-    protected internal void Logout()
-    {
-        CurrentUser = new UserModel();
-    }
 }
