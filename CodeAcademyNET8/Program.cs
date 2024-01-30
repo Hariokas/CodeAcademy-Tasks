@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CodeAcademyNET8.Advanced___OOP.Tasks;
 using CodeAcademyNET8.Projects.ATM_Project;
 
 namespace CodeAcademyNET8;
@@ -49,8 +50,10 @@ internal class Program
         //Interfaces2.Run();
 
         // PROJECT!
-        var atm = new ATMMain();
-        atm.Run();
+        //var atm = new ATMMain();
+        //atm.Run();
+
+        Asynchronous.Run();
 
         #endregion
     }
