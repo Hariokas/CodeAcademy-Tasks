@@ -1,4 +1,5 @@
-﻿using RestaurantSystem.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantSystem.Database;
 using RestaurantSystem.Interfaces;
 using RestaurantSystem.Models;
 
@@ -23,14 +24,19 @@ internal class DbService(RestaurantDbContext db) : IDbService
 
     public Order GetOrder(int tableNumber)
     {
-        return db.Orders.First(o => o.TableNumber == tableNumber);
+        return db.Orders
+            .Include(o => o.Products)
+            .ThenInclude(op => op.Product)
+            .First(o => o.TableNumber == tableNumber);
     }
 
     public IEnumerable<Order> GetAllOrders()
     {
         try
         {
-            return db.Orders;
+            return db.Orders
+                .Include(o => o.Products)
+                .ThenInclude(op => op.Product);
         }
         catch (Exception e)
         {
@@ -43,7 +49,11 @@ internal class DbService(RestaurantDbContext db) : IDbService
     {
         try
         {
-            return db.Orders.OrderByDescending(o => o.OrderTime).Take(count);
+            return db.Orders
+                .OrderByDescending(o => o.OrderTime)
+                .Take(count)
+                .Include(o => o.Products)
+                .ThenInclude(op => op.Product);
         }
         catch (Exception e)
         {
@@ -86,7 +96,6 @@ internal class DbService(RestaurantDbContext db) : IDbService
     }
 
     #endregion
-
 
 
     #region TableManagement
@@ -166,7 +175,6 @@ internal class DbService(RestaurantDbContext db) : IDbService
     }
 
     #endregion
-
 
 
     #region ProductManagement
