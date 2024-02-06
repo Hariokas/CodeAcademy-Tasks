@@ -9,6 +9,7 @@
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
 		<Platforms>AnyCPU;x64</Platforms>
+		<UserSecretsId>8390b9da-b646-46c7-b64c-a84816b375ff</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,10 +24,19 @@
 
 	<ItemGroup>
 	  <Folder Include="Advanced - OOP\Classes\Delegates\" />
+	  <Folder Include="Projects\Restaurant\" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Dapper" Version="2.1.28" />
+	  <PackageReference Include="MailKit" Version="4.3.0" />
+	  <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.1" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 	</ItemGroup>
 
 </Project>

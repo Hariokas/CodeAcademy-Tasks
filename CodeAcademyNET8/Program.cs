@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using CodeAcademyNET8.Advanced___OOP.Tasks;
 using CodeAcademyNET8.Projects.ATM_Project;
+using Microsoft.Extensions.Configuration;
 
 namespace CodeAcademyNET8;
 
@@ -28,7 +29,7 @@ internal class Program
         //TicTacToe.InitializeGame();
         //RandomClassAndTwoDArrays.RunTasks();
         //Dictionaries.RunTasks();
-        //Project.InitializeGame();
+        //RestaurantProject.InitializeGame();
 
         #endregion
 
@@ -52,7 +53,6 @@ internal class Program
         // PROJECT!
         //var atm = new ATMMain();
         //atm.Run();
-
         Asynchronous.Run();
 
         #endregion
