@@ -13,9 +13,7 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
     {
         try
         {
-            foreach (var product in order.Products)
-                db.OrderProducts.Add(product);
-
+            db.OrderProducts.AddRange(order.Products);
             db.Orders.Add(order);
             db.SaveChanges();
         }
@@ -27,10 +25,18 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
 
     public Order GetOrder(int tableNumber)
     {
-        return db.Orders
-            .Include(o => o.Products)
-            .ThenInclude(op => op.Product)
-            .First(o => o.TableNumber == tableNumber);
+        try
+        {
+            return db.Orders
+                .Include(o => o.Products)
+                .ThenInclude(op => op.Product)
+                .First(o => o.TableNumber == tableNumber);
+        }
+        catch (Exception e)
+        {
+            StaticHelpers.PrintError(e);
+            throw;
+        }
     }
 
     public IEnumerable<Order> GetAllOrders()
@@ -65,37 +71,6 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
         }
     }
 
-    public void RemoveOrderItem(int orderItemId)
-    {
-        try
-        {
-            var order = GetOrder(orderItemId);
-            if (order is null) return;
-
-            db.Orders.Remove(order);
-            db.SaveChanges();
-        }
-        catch (Exception e)
-        {
-            StaticHelpers.PrintError(e);
-        }
-    }
-
-    public void UpdateOrderItem(Order orderItem)
-    {
-        try
-        {
-            var item = GetOrder(orderItem.OrderId);
-            if (item is null) return;
-            db.Orders.Update(item);
-            db.SaveChanges();
-        }
-        catch (Exception e)
-        {
-            StaticHelpers.PrintError(e);
-        }
-    }
-
     public IEnumerable<Order> GetOpenOrders()
     {
         try
@@ -125,8 +100,9 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
     {
         try
         {
-            var table = db.Tables.First(t => t.TableId == tableNumber);
-            table.IsOccupied = isOccupied;
+            db.Tables.First(t => t.TableId == tableNumber)
+                .IsOccupied = isOccupied;
+
             db.SaveChanges();
         }
         catch (Exception e)
@@ -148,16 +124,24 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
         }
     }
 
-    public IEnumerable<Table> GetAllTables(bool? occupiedTables = null)
+    public IEnumerable<Table> GetAllTables()
     {
         try
         {
-            return occupiedTables switch
-            {
-                true => db.Tables.Where(t => t.IsOccupied),
-                false => db.Tables.Where(t => !t.IsOccupied),
-                _ => db.Tables
-            };
+            return db.Tables;
+        }
+        catch (Exception e)
+        {
+            StaticHelpers.PrintError(e);
+            throw;
+        }
+    }
+
+    public IEnumerable<Table> GetAllTables(bool occupiedTables)
+    {
+        try
+        {
+            return db.Tables.Where(t => t.IsOccupied == occupiedTables);
         }
         catch (Exception e)
         {
@@ -183,10 +167,7 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
     {
         try
         {
-            var table = db.Tables.First(t => t.TableId == tableNumber);
-            if (table is null) return;
-
-            db.Tables.Remove(table);
+            db.Tables.Remove(GetTable(tableNumber));
             db.SaveChanges();
         }
         catch (Exception e)
@@ -217,10 +198,7 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
     {
         try
         {
-            var menuItem = db.Products.First(p => p.ProductId == menuItemId);
-            if (menuItem is null) return;
-
-            db.Products.Remove(menuItem);
+            db.Products.Remove(GetMenuItem(menuItemId));
             db.SaveChanges();
         }
         catch (Exception e)
@@ -262,6 +240,7 @@ internal class DbService(RestaurantDbContext db) : IDbRepository
             var item = db.Products.First(p => p.ProductId == menuItem.ProductId);
             item.Name = menuItem.Name;
             item.Price = menuItem.Price;
+
             db.SaveChanges();
         }
         catch (Exception e)

@@ -10,8 +10,8 @@ namespace RestaurantSystem;
 internal class RestaurantProject
 {
     private readonly IOrderRepository _orderService;
-    private readonly ITableRepository _tableService;
     private readonly IProductRepository _productRepository;
+    private readonly ITableRepository _tableService;
 
     public RestaurantProject(IConfiguration configuration)
     {
@@ -546,7 +546,7 @@ internal class RestaurantProject
         }
 
         _productRepository.AddProduct(product);
-        
+
         PrintInGreen($"Product added!\n{product}");
         WaitForClickAnyButton();
     }

@@ -9,7 +9,8 @@ internal interface IDbRepository
     void RemoveTable(int tableNumber);
     void UpdateTableOccupancy(int tableNumber, bool isOccupied);
     Table GetTable(int tableNumber);
-    IEnumerable<Table> GetAllTables(bool? occupiedTables = null);
+    IEnumerable<Table> GetAllTables();
+    IEnumerable<Table> GetAllTables(bool occupiedTables);
 
     // Menu item methods
     void AddMenuItem(Product menuItem);
@@ -20,8 +21,6 @@ internal interface IDbRepository
 
     // Order item methods
     void SaveOrder(Order order);
-    void RemoveOrderItem(int orderItemId);
-    void UpdateOrderItem(Order orderItem);
     Order GetOrder(int tableNumber);
     IEnumerable<Order> GetLastOrders(int count);
     IEnumerable<Order> GetAllOrders();

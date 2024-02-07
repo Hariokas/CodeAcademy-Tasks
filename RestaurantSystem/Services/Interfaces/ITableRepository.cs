@@ -7,7 +7,8 @@ internal interface ITableRepository
     void MarkTableAsOccupied(int tableNumber);
     void MarkTableAsFree(int tableNumber);
     Table GetTable(int tableNumber);
-    IEnumerable<Table> GetAllTables(bool? occupiedTables = null);
+    IEnumerable<Table> GetAllTables();
+    IEnumerable<Table> GetAllTables(bool occupiedTables);
     void AddTable(Table table);
     void UpdateTableOccupancy(int tableNumber, bool isOccupied);
     bool TableExists(int tableNumber);

@@ -44,7 +44,20 @@ internal class TableService(IDbRepository dbRepository) : ITableRepository
         }
     }
 
-    public IEnumerable<Table> GetAllTables(bool? occupiedTables = null)
+    public IEnumerable<Table> GetAllTables()
+    {
+        try
+        {
+            return dbRepository.GetAllTables();
+        }
+        catch (Exception e)
+        {
+            StaticHelpers.PrintError(e);
+            throw;
+        }
+    }
+
+    public IEnumerable<Table> GetAllTables(bool occupiedTables)
     {
         try
         {

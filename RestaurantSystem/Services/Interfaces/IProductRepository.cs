@@ -10,5 +10,4 @@ internal interface IProductRepository
     void UpdateProduct(Product product);
     Product GetProduct(int productId);
     IEnumerable<Product> GetAllProducts();
-
 }
