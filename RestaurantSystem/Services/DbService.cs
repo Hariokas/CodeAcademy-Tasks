@@ -13,26 +13,11 @@ internal class DbService(RestaurantDbContext db) : IDbService
     {
         try
         {
+            foreach (var product in order.Products)
+                db.OrderProducts.Add(product);
+
             db.Orders.Add(order);
             db.SaveChanges();
-
-            foreach (var product in order.Products)
-            {
-                var orderProduct = new OrderProduct
-                {
-                    OrderId = order.OrderId,
-                    ProductId = product.ProductId
-                };
-
-                var existingOrderProduct = db.OrderProducts
-                    .FirstOrDefault(op => op.OrderId == orderProduct.OrderId && op.ProductId == orderProduct.ProductId);
-
-                if (existingOrderProduct is null)
-                {
-                    db.OrderProducts.Add(orderProduct);
-                    db.SaveChanges();
-                }
-            }
         }
         catch (Exception e)
         {

@@ -317,7 +317,7 @@ internal class RestaurantProject
         var order = new Order { TableNumber = tableNumber, OrderTime = DateTime.Now, Products = new List<OrderProduct>() };
         foreach (var product in selectedProducts)
         {
-            order.Products.Add(new OrderProduct { Product = product, Order = order});
+            order.Products.Add(new OrderProduct { Product = product });
             //order.Products.Add(new OrderProduct { Product = product });
         }
         
