@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RestaurantSystem.Database;
+using RestaurantSystem.Interfaces;
 using RestaurantSystem.Models;
 using RestaurantSystem.Services;
 using static RestaurantSystem.StaticHelpers;
@@ -8,21 +9,20 @@ namespace RestaurantSystem;
 
 internal class RestaurantProject
 {
-    private readonly RestaurantDbContext _dbContext;
-    private readonly DbService _dbService;
-    private readonly EmailService _emailService;
-    private readonly OrderService _orderService;
-    private readonly TableService _tableService;
+    private readonly IOrderRepository _orderService;
+    private readonly ITableRepository _tableService;
+    private readonly IProductService _productService;
 
     public RestaurantProject(IConfiguration configuration)
     {
-        _dbContext = new RestaurantDbContext();
-        _dbContext.Database.EnsureCreated();
+        var dbContext = new RestaurantDbContext();
+        dbContext.Database.EnsureCreated();
 
-        _dbService = new DbService(_dbContext);
-        _emailService = new EmailService(configuration["Restaurant:EmailPass"]);
-        _tableService = new TableService(_dbService);
-        _orderService = new OrderService(_tableService, _emailService, _dbService);
+        IDbService dbService = new DbService(dbContext);
+        IEmailService emailService = new EmailService(configuration["Restaurant:EmailPass"]);
+        _tableService = new TableService(dbService);
+        _productService = new ProductService(dbService);
+        _orderService = new OrderService(_tableService, emailService, dbService);
     }
 
     public void Run()
@@ -222,8 +222,8 @@ internal class RestaurantProject
             return;
         }
 
-        _dbService.RemoveTable(tableNumber);
-        PrintInGreen($"Table removed!");
+        _tableService.RemoveTable(tableNumber);
+        PrintInGreen("Table removed!");
         WaitForClickAnyButton();
     }
 
@@ -234,9 +234,11 @@ internal class RestaurantProject
     private void PrintOrderManagementOptions()
     {
         PrintInYellow("1. Create Order");
-        PrintInYellow("2. Send Receipt");
-        PrintInYellow("3. Get Last 10 Orders");
-        PrintInYellow("4. Get All Orders");
+        PrintInYellow("2. Close Order");
+        PrintInYellow("3. Get Open Orders");
+        PrintInYellow("4. Send Receipt");
+        PrintInYellow("5. Get Last 10 Orders");
+        PrintInYellow("6. Get All Orders");
         PrintInYellow("0. Back");
     }
 
@@ -254,12 +256,18 @@ internal class RestaurantProject
                 CreateOrder();
                 break;
             case 2:
-                SendReceipt();
+                CloseOrder();
                 break;
             case 3:
-                GetOrders(10);
+                GetOpenOrders();
                 break;
             case 4:
+                SendReceipt();
+                break;
+            case 5:
+                GetOrders(10);
+                break;
+            case 6:
                 GetOrders();
                 break;
             default:
@@ -267,7 +275,56 @@ internal class RestaurantProject
                 Thread.Sleep(1000);
                 break;
         }
+
         return false;
+    }
+
+    private void CloseOrder()
+    {
+        var openOrders = _orderService.GetOpenOrders().ToList();
+        if (openOrders.Count < 1)
+        {
+            PrintInRed("No open orders found.");
+            Thread.Sleep(1000);
+            return;
+        }
+
+        foreach (var openOrder in openOrders)
+            PrintInGreen(openOrder.ToString());
+
+        var orderId = GetIntInput("Enter order id:");
+        if (orderId == -1) return;
+        if (openOrders.All(o => o.OrderId != orderId))
+        {
+            PrintInRed("Invalid order id.");
+            Thread.Sleep(1000);
+            return;
+        }
+
+        var order = openOrders.First(o => o.OrderId == orderId);
+        _orderService.CloseOrder(order);
+        PrintInGreen("Order closed!");
+        if (string.Equals(GetUserInput("Do you want to send receipt via e-mail? (y/n):"), "y",
+                StringComparison.InvariantCultureIgnoreCase))
+            SendReceipt(order);
+
+        WaitForClickAnyButton();
+    }
+
+    private void GetOpenOrders()
+    {
+        var openOrders = _orderService.GetOpenOrders().ToList();
+        if (openOrders.Count < 1)
+        {
+            PrintInRed("No open orders found.");
+            Thread.Sleep(1000);
+            return;
+        }
+
+        foreach (var openOrder in openOrders)
+            PrintInGreen(openOrder.ToString());
+
+        WaitForClickAnyButton();
     }
 
     private void GetOrders(int count = 0)
@@ -314,13 +371,10 @@ internal class RestaurantProject
         var selectedProducts = SelectProducts();
         if (selectedProducts == null) return;
 
-        var order = new Order { TableNumber = tableNumber, OrderTime = DateTime.Now, Products = new List<OrderProduct>() };
-        foreach (var product in selectedProducts)
-        {
-            order.Products.Add(new OrderProduct { Product = product });
-            //order.Products.Add(new OrderProduct { Product = product });
-        }
-        
+        var order = new Order
+            { TableNumber = tableNumber, OrderTime = DateTime.Now, Products = new List<OrderProduct>() };
+        selectedProducts.ForEach(sp => order.Products.Add(new OrderProduct { Product = sp }));
+
         PrintInYellow("Created order:");
         _orderService.PrintOrder(order);
         var createOrder = GetUserInput("Create order? (y/n):");
@@ -332,53 +386,9 @@ internal class RestaurantProject
         WaitForClickAnyButton();
     }
 
-    //private void CreateOrder()
-    //{
-    //    var emptyTables = _tableService.GetAllTables(false).ToList();
-    //    if (emptyTables.Count < 1)
-    //    {
-    //        PrintInRed("No empty tables found.");
-    //        Thread.Sleep(1000);
-    //        return;
-    //    }
-
-    //    foreach (var emptyTable in emptyTables)
-    //        PrintInGreen(emptyTable.ToString());
-
-    //    var tableNumber = GetIntInput("Enter table number:");
-    //    if (tableNumber == -1) return;
-    //    if (emptyTables.All(t => t.TableId != tableNumber))
-    //    {
-    //        PrintInRed("Invalid table number.");
-    //        Thread.Sleep(1000);
-    //        return;
-    //    }
-
-    //    var selectedProducts = SelectProducts();
-    //    if (selectedProducts == null) return;
-
-    //    var order = new Order { TableNumber = tableNumber, OrderTime = DateTime.Now, Products = new List<OrderProduct>() };
-
-    //    foreach (var product in selectedProducts)
-    //    {
-    //        var orderProduct = new OrderProduct { Order = order, Product = product, ProductId = product.ProductId, OrderId = order.OrderId };
-    //        order.Products.Add(orderProduct);
-    //    }
-
-    //    PrintInYellow("Created order:");
-    //    _orderService.PrintOrder(order);
-    //    var createOrder = GetUserInput("Create order? (y/n):");
-    //    if (!createOrder.Equals("y", StringComparison.CurrentCultureIgnoreCase)) return;
-
-    //    _orderService.CreateOrder(order);
-    //    PrintInGreen("Order created!");
-
-    //    WaitForClickAnyButton();
-    //}
-
     private List<Product>? SelectProducts()
     {
-        var menu = _dbService.GetAllMenuItems().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -390,7 +400,7 @@ internal class RestaurantProject
         while (true)
         {
             Console.Clear();
-            foreach (var products in _dbService.GetAllMenuItems())
+            foreach (var products in menu)
                 PrintInYellow(products.ToString());
 
             var productId = GetIntInput("Enter product id:");
@@ -403,7 +413,7 @@ internal class RestaurantProject
                 continue;
             }
 
-            var product = _dbService.GetMenuItem(productId);
+            var product = _productService.GetProduct(productId);
             selectedProducts.Add(product);
             PrintInGreen($"{product.Name} added to order.");
             var addMore = GetUserInput("Add more products? (y/n):");
@@ -415,7 +425,42 @@ internal class RestaurantProject
 
     private void SendReceipt()
     {
+        var openOrders = _orderService.GetLastOrders(10).ToList();
+        if (openOrders.Count < 1)
+        {
+            PrintInRed("No open orders found.");
+            Thread.Sleep(1000);
+            return;
+        }
 
+        foreach (var openOrder in openOrders)
+            PrintInGreen(openOrder.ToString());
+
+        var orderId = GetIntInput("Enter order id:");
+        if (orderId == -1) return;
+        if (openOrders.All(o => o.OrderId != orderId))
+        {
+            PrintInRed("Invalid order id.");
+            Thread.Sleep(1000);
+            return;
+        }
+
+        var order = openOrders.First(o => o.OrderId == orderId);
+        SendReceipt(order);
+    }
+
+    private void SendReceipt(Order order)
+    {
+        var email = GetUserInput("Enter recipient e-mail address:");
+        if (email == "-1") return;
+
+        if (!string.Equals(GetUserInput($"Do you want to send receipt via e-mail to {email}? (y/n):"), "y",
+                StringComparison.InvariantCultureIgnoreCase))
+            return;
+
+        _orderService.SendOrderEmail(email, order);
+        PrintInGreen("Receipt sent!");
+        WaitForClickAnyButton();
     }
 
     #endregion
@@ -458,12 +503,13 @@ internal class RestaurantProject
                 Thread.Sleep(1000);
                 break;
         }
+
         return true;
     }
 
     private void ViewMenu()
     {
-        var menu = _dbService.GetAllMenuItems().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -492,22 +538,22 @@ internal class RestaurantProject
         if (price == -1) return;
 
         var product = new Product { Name = name, Price = price };
-        var productExists = _dbService.GetAllMenuItems().Any(p => p.Name == product.Name);
-        if (productExists)
+        if (_productService.CheckIfProductExists(product))
         {
             PrintInRed($"Product {product.Name} already exists. You should consider updating it.");
             Thread.Sleep(1000);
             return;
         }
 
-        _dbService.AddMenuItem(product);
+        _productService.AddProduct(product);
+        
         PrintInGreen($"Product added!\n{product}");
         WaitForClickAnyButton();
     }
 
     private void RemoveProduct()
     {
-        var menu = _dbService.GetAllMenuItems().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -528,14 +574,14 @@ internal class RestaurantProject
             return;
         }
 
-        _dbService.RemoveMenuItem(productId);
-        PrintInGreen($"Product removed!");
+        _productService.RemoveProduct(productId);
+        PrintInGreen("Product removed!");
         WaitForClickAnyButton();
     }
 
     private void UpdateProduct()
     {
-        var menu = _dbService.GetAllMenuItems().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -563,14 +609,14 @@ internal class RestaurantProject
         if (price == -1) return;
 
         var newProduct = new Product { ProductId = productId, Name = name, Price = price };
-        _dbService.UpdateMenuItem(newProduct);
+        _productService.UpdateProduct(newProduct);
         PrintInGreen($"Product updated!\n{newProduct}");
         WaitForClickAnyButton();
     }
 
     private void ImportProducts()
     {
-        if (_dbService.GetAllMenuItems().Any())
+        if (_productService.GetAllProducts().Any())
         {
             PrintInRed("Products already exist.");
             Thread.Sleep(1000);
@@ -598,13 +644,13 @@ internal class RestaurantProject
             new() { Name = "DocShake ", Price = (decimal)3.59 },
 
             new() { Name = "DocLatte ", Price = (decimal)2.99 },
-            new() { Name = "DocCafe Espresso", Price = (decimal)2.59 },
+            new() { Name = "DocCafe Espresso", Price = (decimal)2.59 }
         };
 
         foreach (var product in products)
         {
             PrintInYellow($"Importing {product}");
-            _dbService.AddMenuItem(product);
+            _productService.AddProduct(product);
         }
 
         PrintInGreen("Done!");

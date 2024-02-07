@@ -31,5 +31,4 @@ internal class EmailService(string password) : IEmailService
             client.Disconnect(true);
         }
     }
-
 }

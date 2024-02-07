@@ -44,7 +44,7 @@ internal class DbService(RestaurantDbContext db) : IDbService
         catch (Exception e)
         {
             StaticHelpers.PrintError(e);
-            return null;
+            throw;
         }
     }
 
@@ -61,7 +61,7 @@ internal class DbService(RestaurantDbContext db) : IDbService
         catch (Exception e)
         {
             StaticHelpers.PrintError(e);
-            return null;
+            throw;
         }
     }
 
@@ -96,6 +96,26 @@ internal class DbService(RestaurantDbContext db) : IDbService
         }
     }
 
+    public IEnumerable<Order> GetOpenOrders()
+    {
+        try
+        {
+            return db.Tables
+                .Where(t => t.IsOccupied)
+                .SelectMany(t => db.Orders
+                    .Where(o => o.TableNumber == t.TableId)
+                    .OrderByDescending(o => o.OrderTime)
+                    .Take(1))
+                .Include(o => o.Products)
+                .ThenInclude(op => op.Product);
+        }
+        catch (Exception e)
+        {
+            StaticHelpers.PrintError(e);
+            throw;
+        }
+    }
+
     #endregion
 
 
@@ -124,7 +144,7 @@ internal class DbService(RestaurantDbContext db) : IDbService
         catch (Exception e)
         {
             StaticHelpers.PrintError(e);
-            return null;
+            throw;
         }
     }
 
@@ -142,7 +162,7 @@ internal class DbService(RestaurantDbContext db) : IDbService
         catch (Exception e)
         {
             StaticHelpers.PrintError(e);
-            return null;
+            throw;
         }
     }
 
@@ -218,7 +238,7 @@ internal class DbService(RestaurantDbContext db) : IDbService
         catch (Exception e)
         {
             StaticHelpers.PrintError(e);
-            return null;
+            throw;
         }
     }
 
@@ -231,7 +251,7 @@ internal class DbService(RestaurantDbContext db) : IDbService
         catch (Exception e)
         {
             StaticHelpers.PrintError(e);
-            return null;
+            throw;
         }
     }
 

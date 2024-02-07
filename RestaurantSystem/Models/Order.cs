@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantSystem.Models;
 
@@ -8,6 +8,7 @@ internal class Order
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int OrderId { get; set; }
+
     public int TableNumber { get; set; }
     public ICollection<OrderProduct> Products { get; set; }
     public DateTime OrderTime { get; set; } = DateTime.MinValue;
@@ -15,6 +16,7 @@ internal class Order
 
     public override string ToString()
     {
-        return $"Order ID: {OrderId}\n\tTable ID: {TableNumber}\n\tOrder time: {OrderTime}\n\tProducts: {string.Join("\n\t\t", Products)}\n\tTotal amount: {TotalAmount}";
+        return
+            $"Order ID: {OrderId}\n\tTable ID: {TableNumber}\n\tOrder time: {OrderTime}\n\tProducts: {string.Join("\n\t\t", Products)}\n\tTotal amount: {TotalAmount}";
     }
 }

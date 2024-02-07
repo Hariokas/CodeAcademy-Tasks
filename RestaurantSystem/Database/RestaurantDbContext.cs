@@ -13,7 +13,7 @@ internal class RestaurantDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source=RestaurantSystem2.db");
-        optionsBuilder.EnableSensitiveDataLogging(true);
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

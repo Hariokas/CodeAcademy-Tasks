@@ -25,4 +25,5 @@ internal interface IDbService
     Order GetOrder(int tableNumber);
     IEnumerable<Order> GetLastOrders(int count);
     IEnumerable<Order> GetAllOrders();
+    IEnumerable<Order> GetOpenOrders();
 }

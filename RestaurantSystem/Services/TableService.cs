@@ -69,7 +69,7 @@ internal class TableService(IDbService dbService) : ITableRepository
             throw;
         }
     }
-    
+
     public void UpdateTableOccupancy(int tableNumber, bool isOccupied)
     {
         try
@@ -83,6 +83,13 @@ internal class TableService(IDbService dbService) : ITableRepository
         }
     }
 
-    public bool TableExists(int tableId) => dbService.GetAllTables().Any(t => t.TableId == tableId);
+    public bool TableExists(int tableId)
+    {
+        return dbService.GetAllTables().Any(t => t.TableId == tableId);
+    }
 
+    public void RemoveTable(int tableNumber)
+    {
+        dbService.RemoveTable(tableNumber);
+    }
 }

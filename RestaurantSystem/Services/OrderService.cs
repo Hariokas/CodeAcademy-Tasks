@@ -13,8 +13,9 @@ internal class OrderService(
         dbService.SaveOrder(order);
     }
 
-    public void SendOrderEmail(string to, string subject, Order order)
+    public void SendOrderEmail(string to, Order order)
     {
+        var subject = $"Receipt from DocManald's restaurant visit ({order.OrderTime.ToShortDateString()})";
         emailService.SendEmail(to, subject, order.ToString());
     }
 
@@ -52,13 +53,13 @@ internal class OrderService(
         SaveOrder(order);
     }
 
-    public void CloseOrder(int tableNumber, string email = "")
+    public void CloseOrder(Order order)
     {
-        var order = GetOrder(tableNumber);
-        tableRepository.MarkTableAsFree(tableNumber);
+        tableRepository.MarkTableAsFree(order.TableNumber);
+    }
 
-        if (!string.IsNullOrEmpty(email))
-            SendOrderEmail(email,
-                $"Your restaurant order {order.OrderId} at {order.OrderTime.ToShortDateString()}", order);
+    public IEnumerable<Order> GetOpenOrders()
+    {
+        return dbService.GetOpenOrders();
     }
 }

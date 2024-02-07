@@ -13,14 +13,12 @@ internal class OrderProduct
 
     public int ProductId { get; set; }
 
-    [ForeignKey("ProductId")]
-    public Product Product { get; set; }
+    [ForeignKey("ProductId")] public Product Product { get; set; }
 
-    [ForeignKey("OrderId")]
-    public Order Order { get; set; }
+    [ForeignKey("OrderId")] public Order Order { get; set; }
 
     public override string ToString()
     {
-        return $"{Product.Name} - {Product.Price}x";
+        return $"{Product.Name} - {Product.Price}";
     }
 }
