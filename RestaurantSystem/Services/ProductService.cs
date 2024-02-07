@@ -1,37 +1,37 @@
-﻿using RestaurantSystem.Interfaces;
-using RestaurantSystem.Models;
+﻿using RestaurantSystem.Models;
+using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class ProductService(IDbService dbService) : IProductService
+internal class ProductService(IDbRepository dbRepository) : IProductRepository
 {
     public bool CheckIfProductExists(Product product)
     {
-        return dbService.GetAllMenuItems().Any(p => p == product);
+        return dbRepository.GetAllMenuItems().Any(p => p == product);
     }
 
     public void AddProduct(Product product)
     {
-        dbService.AddMenuItem(product);
+        dbRepository.AddMenuItem(product);
     }
 
     public void RemoveProduct(int productId)
     {
-        dbService.RemoveMenuItem(productId);
+        dbRepository.RemoveMenuItem(productId);
     }
 
     public void UpdateProduct(Product product)
     {
-        dbService.UpdateMenuItem(product);
+        dbRepository.UpdateMenuItem(product);
     }
 
     public Product GetProduct(int productId)
     {
-        return dbService.GetMenuItem(productId);
+        return dbRepository.GetMenuItem(productId);
     }
 
     public IEnumerable<Product> GetAllProducts()
     {
-        return dbService.GetAllMenuItems();
+        return dbRepository.GetAllMenuItems();
     }
 }

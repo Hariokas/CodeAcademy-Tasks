@@ -1,27 +1,27 @@
-﻿using RestaurantSystem.Interfaces;
-using RestaurantSystem.Models;
+﻿using RestaurantSystem.Models;
+using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
 internal class OrderService(
     ITableRepository tableRepository,
-    IEmailService emailService,
-    IDbService dbService) : IOrderRepository
+    IEmailRepository emailRepository,
+    IDbRepository dbRepository) : IOrderRepository
 {
     public void SaveOrder(Order order)
     {
-        dbService.SaveOrder(order);
+        dbRepository.SaveOrder(order);
     }
 
     public void SendOrderEmail(string to, Order order)
     {
         var subject = $"Receipt from DocManald's restaurant visit ({order.OrderTime.ToShortDateString()})";
-        emailService.SendEmail(to, subject, order.ToString());
+        emailRepository.SendEmail(to, subject, order.ToString());
     }
 
     public Order GetOrder(int tableNumber)
     {
-        return dbService.GetOrder(tableNumber);
+        return dbRepository.GetOrder(tableNumber);
     }
 
     public void PrintOrder(Order order)
@@ -39,12 +39,12 @@ internal class OrderService(
 
     public IEnumerable<Order> GetAllOrders()
     {
-        return dbService.GetAllOrders();
+        return dbRepository.GetAllOrders();
     }
 
     public IEnumerable<Order> GetLastOrders(int count)
     {
-        return dbService.GetLastOrders(count);
+        return dbRepository.GetLastOrders(count);
     }
 
     public void CreateOrder(Order order)
@@ -60,6 +60,6 @@ internal class OrderService(
 
     public IEnumerable<Order> GetOpenOrders()
     {
-        return dbService.GetOpenOrders();
+        return dbRepository.GetOpenOrders();
     }
 }

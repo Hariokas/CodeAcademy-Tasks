@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantSystem.Database;
-using RestaurantSystem.Interfaces;
 using RestaurantSystem.Models;
+using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class DbService(RestaurantDbContext db) : IDbService
+internal class DbService(RestaurantDbContext db) : IDbRepository
 {
     #region OrderManagement
 

@@ -1,11 +1,11 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using RestaurantSystem.Interfaces;
+using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class EmailService(string password) : IEmailService
+internal class EmailService(string password) : IEmailRepository
 {
     public void SendEmail(string to, string subject, string body)
     {

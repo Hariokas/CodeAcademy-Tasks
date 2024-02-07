@@ -1,8 +1,8 @@
 ﻿using RestaurantSystem.Models;
 
-namespace RestaurantSystem.Interfaces;
+namespace RestaurantSystem.Services.Interfaces;
 
-internal interface IProductService
+internal interface IProductRepository
 {
     bool CheckIfProductExists(Product product);
     void AddProduct(Product product);

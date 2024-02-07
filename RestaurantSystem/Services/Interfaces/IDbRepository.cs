@@ -1,8 +1,8 @@
 ﻿using RestaurantSystem.Models;
 
-namespace RestaurantSystem.Interfaces;
+namespace RestaurantSystem.Services.Interfaces;
 
-internal interface IDbService
+internal interface IDbRepository
 {
     // Table methods
     void AddTable(Table table);

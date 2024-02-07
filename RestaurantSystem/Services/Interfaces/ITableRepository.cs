@@ -1,6 +1,6 @@
 ﻿using RestaurantSystem.Models;
 
-namespace RestaurantSystem.Interfaces;
+namespace RestaurantSystem.Services.Interfaces;
 
 internal interface ITableRepository
 {

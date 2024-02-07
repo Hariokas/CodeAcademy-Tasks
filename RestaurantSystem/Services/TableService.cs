@@ -1,15 +1,15 @@
-﻿using RestaurantSystem.Interfaces;
-using RestaurantSystem.Models;
+﻿using RestaurantSystem.Models;
+using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class TableService(IDbService dbService) : ITableRepository
+internal class TableService(IDbRepository dbRepository) : ITableRepository
 {
     public void MarkTableAsOccupied(int tableNumber)
     {
         try
         {
-            dbService.UpdateTableOccupancy(tableNumber, true);
+            dbRepository.UpdateTableOccupancy(tableNumber, true);
         }
         catch (Exception e)
         {
@@ -22,7 +22,7 @@ internal class TableService(IDbService dbService) : ITableRepository
     {
         try
         {
-            dbService.UpdateTableOccupancy(tableNumber, false);
+            dbRepository.UpdateTableOccupancy(tableNumber, false);
         }
         catch (Exception e)
         {
@@ -35,7 +35,7 @@ internal class TableService(IDbService dbService) : ITableRepository
     {
         try
         {
-            return dbService.GetTable(tableNumber);
+            return dbRepository.GetTable(tableNumber);
         }
         catch (Exception e)
         {
@@ -48,7 +48,7 @@ internal class TableService(IDbService dbService) : ITableRepository
     {
         try
         {
-            return dbService.GetAllTables(occupiedTables);
+            return dbRepository.GetAllTables(occupiedTables);
         }
         catch (Exception e)
         {
@@ -61,7 +61,7 @@ internal class TableService(IDbService dbService) : ITableRepository
     {
         try
         {
-            dbService.AddTable(table);
+            dbRepository.AddTable(table);
         }
         catch (Exception e)
         {
@@ -74,7 +74,7 @@ internal class TableService(IDbService dbService) : ITableRepository
     {
         try
         {
-            dbService.UpdateTableOccupancy(tableNumber, isOccupied);
+            dbRepository.UpdateTableOccupancy(tableNumber, isOccupied);
         }
         catch (Exception e)
         {
@@ -85,11 +85,11 @@ internal class TableService(IDbService dbService) : ITableRepository
 
     public bool TableExists(int tableId)
     {
-        return dbService.GetAllTables().Any(t => t.TableId == tableId);
+        return dbRepository.GetAllTables().Any(t => t.TableId == tableId);
     }
 
     public void RemoveTable(int tableNumber)
     {
-        dbService.RemoveTable(tableNumber);
+        dbRepository.RemoveTable(tableNumber);
     }
 }
