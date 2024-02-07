@@ -11,8 +11,8 @@ using RestaurantSystem.Database;
 namespace RestaurantSystem.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    [Migration("20240206184336_Changed-Key")]
-    partial class ChangedKey
+    [Migration("20240206200454_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,10 @@ namespace RestaurantSystem.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("OrderProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ProductId");
@@ -66,6 +70,9 @@ namespace RestaurantSystem.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });

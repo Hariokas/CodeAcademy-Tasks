@@ -10,8 +10,7 @@ internal class Product
     public int ProductId { get; set; }
     public string Name { get; set; }
     public decimal Price { get; set; }
-    public ICollection<OrderProduct> Orders { get; set; } = new List<OrderProduct>();
-
+    public ICollection<OrderProduct> Orders { get; set; }
     public override string ToString()
     {
         return $"Product ID: {ProductId}\n\tProduct: {Name}\n\tPrice: {Price}";

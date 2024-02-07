@@ -15,6 +15,24 @@ internal class DbService(RestaurantDbContext db) : IDbService
         {
             db.Orders.Add(order);
             db.SaveChanges();
+
+            foreach (var product in order.Products)
+            {
+                var orderProduct = new OrderProduct
+                {
+                    OrderId = order.OrderId,
+                    ProductId = product.ProductId
+                };
+
+                var existingOrderProduct = db.OrderProducts
+                    .FirstOrDefault(op => op.OrderId == orderProduct.OrderId && op.ProductId == orderProduct.ProductId);
+
+                if (existingOrderProduct is null)
+                {
+                    db.OrderProducts.Add(orderProduct);
+                    db.SaveChanges();
+                }
+            }
         }
         catch (Exception e)
         {
@@ -66,10 +84,10 @@ internal class DbService(RestaurantDbContext db) : IDbService
     {
         try
         {
-            var orderItem = db.Orders.First(o => o.OrderId == orderItemId);
-            if (orderItem is null) return;
+            var order = GetOrder(orderItemId);
+            if (order is null) return;
 
-            db.Orders.Remove(orderItem);
+            db.Orders.Remove(order);
             db.SaveChanges();
         }
         catch (Exception e)
@@ -82,11 +100,9 @@ internal class DbService(RestaurantDbContext db) : IDbService
     {
         try
         {
-            var item = db.Orders.First(o => o.OrderId == orderItem.OrderId);
-            item.Products = orderItem.Products;
-            item.OrderTime = orderItem.OrderTime;
-            item.TableNumber = orderItem.TableNumber;
-
+            var item = GetOrder(orderItem.OrderId);
+            if (item is null) return;
+            db.Orders.Update(item);
             db.SaveChanges();
         }
         catch (Exception e)

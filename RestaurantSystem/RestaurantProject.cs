@@ -273,6 +273,7 @@ internal class RestaurantProject
     private void GetOrders(int count = 0)
     {
         var orders = count == 0 ? _orderService.GetAllOrders() : _orderService.GetLastOrders(count);
+
         var ordersList = orders.ToList();
 
         if (ordersList.Count < 1)
@@ -313,13 +314,13 @@ internal class RestaurantProject
         var selectedProducts = SelectProducts();
         if (selectedProducts == null) return;
 
-        var order = new Order { TableNumber = tableNumber, OrderTime = DateTime.Now };
+        var order = new Order { TableNumber = tableNumber, OrderTime = DateTime.Now, Products = new List<OrderProduct>() };
         foreach (var product in selectedProducts)
         {
-            var orderProduct = new OrderProduct { Order = order, Product = product };
-            order.Products.Add(orderProduct);
+            order.Products.Add(new OrderProduct { Product = product, Order = order});
+            //order.Products.Add(new OrderProduct { Product = product });
         }
-
+        
         PrintInYellow("Created order:");
         _orderService.PrintOrder(order);
         var createOrder = GetUserInput("Create order? (y/n):");
@@ -330,6 +331,50 @@ internal class RestaurantProject
 
         WaitForClickAnyButton();
     }
+
+    //private void CreateOrder()
+    //{
+    //    var emptyTables = _tableService.GetAllTables(false).ToList();
+    //    if (emptyTables.Count < 1)
+    //    {
+    //        PrintInRed("No empty tables found.");
+    //        Thread.Sleep(1000);
+    //        return;
+    //    }
+
+    //    foreach (var emptyTable in emptyTables)
+    //        PrintInGreen(emptyTable.ToString());
+
+    //    var tableNumber = GetIntInput("Enter table number:");
+    //    if (tableNumber == -1) return;
+    //    if (emptyTables.All(t => t.TableId != tableNumber))
+    //    {
+    //        PrintInRed("Invalid table number.");
+    //        Thread.Sleep(1000);
+    //        return;
+    //    }
+
+    //    var selectedProducts = SelectProducts();
+    //    if (selectedProducts == null) return;
+
+    //    var order = new Order { TableNumber = tableNumber, OrderTime = DateTime.Now, Products = new List<OrderProduct>() };
+
+    //    foreach (var product in selectedProducts)
+    //    {
+    //        var orderProduct = new OrderProduct { Order = order, Product = product, ProductId = product.ProductId, OrderId = order.OrderId };
+    //        order.Products.Add(orderProduct);
+    //    }
+
+    //    PrintInYellow("Created order:");
+    //    _orderService.PrintOrder(order);
+    //    var createOrder = GetUserInput("Create order? (y/n):");
+    //    if (!createOrder.Equals("y", StringComparison.CurrentCultureIgnoreCase)) return;
+
+    //    _orderService.CreateOrder(order);
+    //    PrintInGreen("Order created!");
+
+    //    WaitForClickAnyButton();
+    //}
 
     private List<Product>? SelectProducts()
     {

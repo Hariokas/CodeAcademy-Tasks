@@ -13,6 +13,7 @@ internal class RestaurantDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source=RestaurantSystem.db");
+        optionsBuilder.EnableSensitiveDataLogging(true);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +30,17 @@ internal class RestaurantDbContext : DbContext
             .HasOne(op => op.Product)
             .WithMany(p => p.Orders)
             .HasForeignKey(op => op.ProductId);
-    }
 
+        modelBuilder.Entity<OrderProduct>()
+            .HasIndex(op => new { op.OrderProductId })
+            .IsUnique();
+
+        modelBuilder.Entity<Product>()
+            .HasIndex(p => p.ProductId)
+            .IsUnique();
+
+        modelBuilder.Entity<OrderProduct>()
+            .Property(op => op.OrderProductId)
+            .ValueGeneratedOnAdd();
+    }
 }
