@@ -1,6 +1,6 @@
 ﻿namespace RestaurantSystem.Services.Interfaces;
 
-internal interface IEmailRepository
+internal interface IEmailService
 {
     void SendEmail(string to, string subject, string body);
 }

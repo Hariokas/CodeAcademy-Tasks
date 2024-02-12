@@ -2,7 +2,7 @@
 
 namespace RestaurantSystem.Services.Interfaces;
 
-internal interface ITableRepository
+internal interface ITableService
 {
     void MarkTableAsOccupied(int tableNumber);
     void MarkTableAsFree(int tableNumber);

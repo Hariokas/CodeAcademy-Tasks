@@ -4,9 +4,9 @@ using RestaurantSystem.Services.Interfaces;
 namespace RestaurantSystem.Services;
 
 internal class OrderService(
-    ITableRepository tableRepository,
-    IEmailRepository emailRepository,
-    IDbRepository dbRepository) : IOrderRepository
+    ITableService tableService,
+    IEmailService emailRepository,
+    IDbRepository dbRepository) : IOrderService
 {
     public void SaveOrder(Order order)
     {
@@ -26,7 +26,7 @@ internal class OrderService(
 
     public void PrintOrder(Order order)
     {
-        var table = tableRepository.GetTable(order.TableNumber);
+        var table = tableService.GetTable(order.TableNumber);
         Console.WriteLine($"Table {table.TableId} - {table.NumberOfSeats} seats");
         Console.WriteLine($"Order ID: {order.OrderId}");
         Console.WriteLine($"Order time: {order.OrderTime}");
@@ -49,13 +49,13 @@ internal class OrderService(
 
     public void CreateOrder(Order order)
     {
-        tableRepository.MarkTableAsOccupied(order.TableNumber);
+        tableService.MarkTableAsOccupied(order.TableNumber);
         SaveOrder(order);
     }
 
     public void CloseOrder(Order order)
     {
-        tableRepository.MarkTableAsFree(order.TableNumber);
+        tableService.MarkTableAsFree(order.TableNumber);
     }
 
     public IEnumerable<Order> GetOpenOrders()

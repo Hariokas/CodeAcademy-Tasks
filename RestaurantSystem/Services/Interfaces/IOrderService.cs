@@ -2,7 +2,7 @@
 
 namespace RestaurantSystem.Services.Interfaces;
 
-internal interface IOrderRepository
+internal interface IOrderService
 {
     void SaveOrder(Order order);
     void SendOrderEmail(string to, Order order);

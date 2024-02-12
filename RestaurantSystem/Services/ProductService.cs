@@ -3,7 +3,7 @@ using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class ProductService(IDbRepository dbRepository) : IProductRepository
+internal class ProductService(IDbRepository dbRepository) : IProductService
 {
     public bool CheckIfProductExists(Product product)
     {

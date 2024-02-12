@@ -9,19 +9,19 @@ namespace RestaurantSystem;
 
 internal class RestaurantProject
 {
-    private readonly IOrderRepository _orderService;
-    private readonly IProductRepository _productRepository;
-    private readonly ITableRepository _tableService;
+    private readonly IOrderService _orderService;
+    private readonly IProductService _productService;
+    private readonly ITableService _tableService;
 
     public RestaurantProject(IConfiguration configuration)
     {
         var dbContext = new RestaurantDbContext();
         dbContext.Database.EnsureCreated();
 
-        IDbRepository dbRepository = new DbService(dbContext);
-        IEmailRepository emailRepository = new EmailService(configuration["Restaurant:EmailPass"]);
+        IDbRepository dbRepository = new DbRepository(dbContext);
+        IEmailService emailRepository = new EmailService(configuration["Restaurant:EmailPass"]);
         _tableService = new TableService(dbRepository);
-        _productRepository = new ProductService(dbRepository);
+        _productService = new ProductService(dbRepository);
         _orderService = new OrderService(_tableService, emailRepository, dbRepository);
     }
 
@@ -388,7 +388,7 @@ internal class RestaurantProject
 
     private List<Product>? SelectProducts()
     {
-        var menu = _productRepository.GetAllProducts().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -413,7 +413,7 @@ internal class RestaurantProject
                 continue;
             }
 
-            var product = _productRepository.GetProduct(productId);
+            var product = _productService.GetProduct(productId);
             selectedProducts.Add(product);
             PrintInGreen($"{product.Name} added to order.");
             var addMore = GetUserInput("Add more products? (y/n):");
@@ -509,7 +509,7 @@ internal class RestaurantProject
 
     private void ViewMenu()
     {
-        var menu = _productRepository.GetAllProducts().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -538,14 +538,14 @@ internal class RestaurantProject
         if (price == -1) return;
 
         var product = new Product { Name = name, Price = price };
-        if (_productRepository.CheckIfProductExists(product))
+        if (_productService.CheckIfProductExists(product))
         {
             PrintInRed($"Product {product.Name} already exists. You should consider updating it.");
             Thread.Sleep(1000);
             return;
         }
 
-        _productRepository.AddProduct(product);
+        _productService.AddProduct(product);
 
         PrintInGreen($"Product added!\n{product}");
         WaitForClickAnyButton();
@@ -553,7 +553,7 @@ internal class RestaurantProject
 
     private void RemoveProduct()
     {
-        var menu = _productRepository.GetAllProducts().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -574,14 +574,14 @@ internal class RestaurantProject
             return;
         }
 
-        _productRepository.RemoveProduct(productId);
+        _productService.RemoveProduct(productId);
         PrintInGreen("Product removed!");
         WaitForClickAnyButton();
     }
 
     private void UpdateProduct()
     {
-        var menu = _productRepository.GetAllProducts().ToList();
+        var menu = _productService.GetAllProducts().ToList();
         if (menu.Count < 1)
         {
             PrintInRed("No products found.");
@@ -609,14 +609,14 @@ internal class RestaurantProject
         if (price == -1) return;
 
         var newProduct = new Product { ProductId = productId, Name = name, Price = price };
-        _productRepository.UpdateProduct(newProduct);
+        _productService.UpdateProduct(newProduct);
         PrintInGreen($"Product updated!\n{newProduct}");
         WaitForClickAnyButton();
     }
 
     private void ImportProducts()
     {
-        if (_productRepository.GetAllProducts().Any())
+        if (_productService.GetAllProducts().Any())
         {
             PrintInRed("Products already exist.");
             Thread.Sleep(1000);
@@ -650,7 +650,7 @@ internal class RestaurantProject
         foreach (var product in products)
         {
             PrintInYellow($"Importing {product}");
-            _productRepository.AddProduct(product);
+            _productService.AddProduct(product);
         }
 
         PrintInGreen("Done!");

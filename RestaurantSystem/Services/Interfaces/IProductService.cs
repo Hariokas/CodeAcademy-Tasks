@@ -2,7 +2,7 @@
 
 namespace RestaurantSystem.Services.Interfaces;
 
-internal interface IProductRepository
+internal interface IProductService
 {
     bool CheckIfProductExists(Product product);
     void AddProduct(Product product);

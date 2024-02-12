@@ -5,7 +5,7 @@ using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class EmailService(string password) : IEmailRepository
+internal class EmailService(string password) : IEmailService
 {
     public void SendEmail(string to, string subject, string body)
     {
@@ -23,12 +23,19 @@ internal class EmailService(string password) : IEmailRepository
 
     private void SendEmail(MimeMessage message)
     {
-        using (var client = new SmtpClient())
+        try
         {
-            client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            client.Authenticate("haroldas.zalg@gmail.com", password);
-            client.Send(message);
-            client.Disconnect(true);
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                client.Authenticate("haroldas.zalg@gmail.com", password);
+                client.Send(message);
+                client.Disconnect(true);
+            }
+        }
+        catch (Exception e)
+        {
+            StaticHelpers.PrintError(e);
         }
     }
 }

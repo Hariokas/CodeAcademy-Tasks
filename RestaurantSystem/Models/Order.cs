@@ -17,6 +17,6 @@ internal class Order
     public override string ToString()
     {
         return
-            $"Order ID: {OrderId}\n\tTable ID: {TableNumber}\n\tOrder time: {OrderTime}\n\tProducts: {string.Join("\n\t\t", Products)}\n\tTotal amount: {TotalAmount}";
+            $"Order ID: {OrderId}\n\tTable ID:\t{TableNumber}\n\tOrder time:\t{OrderTime}\n\tProducts:\t{string.Join("\n\t\t\t", Products)}\n\tTotal amount:\t{TotalAmount}";
     }
 }

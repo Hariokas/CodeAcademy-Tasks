@@ -3,7 +3,7 @@ using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class TableService(IDbRepository dbRepository) : ITableRepository
+internal class TableService(IDbRepository dbRepository) : ITableService
 {
     public void MarkTableAsOccupied(int tableNumber)
     {

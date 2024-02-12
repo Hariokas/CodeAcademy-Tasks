@@ -5,7 +5,7 @@ using RestaurantSystem.Services.Interfaces;
 
 namespace RestaurantSystem.Services;
 
-internal class DbService(RestaurantDbContext db) : IDbRepository
+internal class DbRepository(RestaurantDbContext db) : IDbRepository
 {
     #region OrderManagement
 
